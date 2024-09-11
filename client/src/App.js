@@ -1,57 +1,23 @@
 import './App.css';
+import Post from "./Post";
+import Header from './Header';
+import {Route, Routes} from "react-router-dom";
+import Layout from './Layout';
+import IndexPage from './pages/IndexPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
-    <main>
-      <header>
-        <a href="" className="logo">MyBlog</a>
-        <nav>
-          <a href="">Login</a>
-          <a href="">Register</a>
-        </nav>
-      </header>
-      <div className="post">
-        <div className="image">
-          <img src="https://www.docker.com/wp-content/uploads/2022/12/Docker-Temporary-Image-Social-Thumbnail-1200x630-1.png" alt=""></img>
-        </div>
-        <div className="texts">
-          <h2>Getting Started with the Labs AI Tools for Devs Docker Desktop Extension</h2>
-          <p className="info">
-            <a className="author">kousei</a>
-            <time>2024-10-09 21:02</time>
-          </p>
-          <p className="summary">Explore the Labs AI Tools for Devs extension in Docker Desktop, designed for prompt authors to easily build, run, and share their AI tools. Get started quickly with our guide to installing the extension and running your first prompts.</p>
-        </div>
-      </div>
-      
-      <div className="post">
-        <div className="image">
-          <img src="https://www.docker.com/wp-content/uploads/2022/12/Docker-Temporary-Image-Social-Thumbnail-1200x630-1.png" alt=""></img>
-        </div>
-        <div className="texts">
-          <h2>Getting Started with the Labs AI Tools for Devs Docker Desktop Extension</h2>
-          <p className="info">
-            <a className="author">kousei</a>
-            <time>2024-10-09 21:02</time>
-          </p>
-          <p className="summary">Explore the Labs AI Tools for Devs extension in Docker Desktop, designed for prompt authors to easily build, run, and share their AI tools. Get started quickly with our guide to installing the extension and running your first prompts.</p>
-        </div>
-      </div>
-
-      <div className="post">
-        <div className="image">
-          <img src="https://www.docker.com/wp-content/uploads/2022/12/Docker-Temporary-Image-Social-Thumbnail-1200x630-1.png" alt=""></img>
-        </div>
-        <div className="texts">
-          <h2>Getting Started with the Labs AI Tools for Devs Docker Desktop Extension</h2>
-          <p className="info">
-            <a className="author">kousei</a>
-            <time>2024-10-09 21:02</time>
-          </p>
-          <p className="summary">Explore the Labs AI Tools for Devs extension in Docker Desktop, designed for prompt authors to easily build, run, and share their AI tools. Get started quickly with our guide to installing the extension and running your first prompts.</p>
-        </div>
-      </div>
-    </main>
+    <Routes>
+      <Route path="/" element={<Layout/>}>
+      <Route index element={
+          <IndexPage/>
+      }/>
+      <Route path="/login" element={
+          <LoginPage/>
+      }/>
+      </Route>
+    </Routes>
   );
 }
 
