@@ -1,16 +1,18 @@
-export default function Post(){
+import {formatISO9075} from "date-fns";
+
+export default function Post({title,summary,cover,content,createdAt,author}){
     return (
         <div className="post">
         <div className="image">
-          <img src="https://www.docker.com/wp-content/uploads/2022/12/Docker-Temporary-Image-Social-Thumbnail-1200x630-1.png" alt=""></img>
+            <img src={'http://localhost:4000/'+cover} alt=""/>
         </div>
         <div className="texts">
-          <h2>Getting Started with the Labs AI Tools for Devs Docker Desktop Extension</h2>
+          <h2>{title}</h2>
           <p className="info">
-            <a className="author">kousei</a>
-            <time>2024-10-09 21:02</time>
+            <a className="author">{author.username}</a>
+            <time>{formatISO9075(new Date(createdAt))}</time>
           </p>
-          <p className="summary">Explore the Labs AI Tools for Devs extension in Docker Desktop, designed for prompt authors to easily build, run, and share their AI tools. Get started quickly with our guide to installing the extension and running your first prompts.</p>
+          <p className="summary">{summary}</p>
         </div>
       </div>
     );
