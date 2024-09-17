@@ -10,6 +10,9 @@ export default function Header(){
     }).then(response => {
       response.json().then(userInfo => {
         setUserInfo(userInfo);
+      }).catch(err => {
+        console.log(err);
+        setUserInfo(null);
       });
     });
   }, []);
@@ -30,6 +33,7 @@ export default function Header(){
         <nav>
           {username && (
             <>
+              <span>Hello, {username}</span>
               <Link to="/create">Create new post</Link>
               <a onClick={logout}>Logout</a>
             </>

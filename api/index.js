@@ -56,10 +56,21 @@ app.post('/login', async (req,res) => {
 
 app.get('/profile', (req,res) => {
     const {token} = req.cookies;
-    jwt.verify(token, secret, {}, (err,info) => {
-        if (err) throw err;
+
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided, please log in.' });
+      }
+    
+      jwt.verify(token, secret, {}, (err, info) => {
+        if (err) {
+          return res.status(403).json({ message: 'Invalid or expired token' });
+        }
         res.json(info);
-    });
+      });
+    // jwt.verify(token, secret, {}, (err,info) => {
+    //     if (err) throw err;
+    //     res.json(info);
+    // });
 });
 
 app.post('/logout', (req,res) => {
@@ -88,6 +99,40 @@ app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
   });
 });
 
+app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
+    let newPath = null;
+    if (req.file) {
+      const { originalname, path } = req.file;
+      const parts = originalname.split('.');
+      const ext = parts[parts.length - 1];
+      newPath = path + '.' + ext;
+      fs.renameSync(path, newPath);
+    }
+  
+    const { token } = req.cookies;
+    jwt.verify(token, secret, {}, async (err, info) => {
+      if (err) throw err;
+      const { id, title, summary, content } = req.body;
+      const postDoc = await Post.findById(id);
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+      if (!isAuthor) {
+        return res.status(400).json('You are not the author');
+      }
+  
+      // Update the postDoc object directly
+      postDoc.title = title;
+      postDoc.summary = summary;
+      postDoc.content = content;
+      postDoc.cover = newPath ? newPath : postDoc.cover;
+  
+      // Save the updated document
+      await postDoc.save();
+  
+      res.json(postDoc);
+    });
+  });
+  
+
 app.get('/post', async (req,res) => {
     res.json(
         await Post.find()
@@ -96,6 +141,12 @@ app.get('/post', async (req,res) => {
           .limit(20)
     );
 });
+
+app.get('/post/:id', async (req, res) => {
+    const {id} = req.params;
+    const postDoc = await Post.findById(id).populate('author', ['username']);
+    res.json(postDoc);
+})
 
 app.listen(4000);
 
